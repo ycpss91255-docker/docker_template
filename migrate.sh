@@ -188,13 +188,13 @@ _update_dockerfile() {
     sed -i 's|docker_setup_helper/src/config|docker_template/config|g' "${dockerfile}"
 
     # Ensure smoke tests are copied from docker_template
-    if ! grep -q "docker_template/smoke_test" "${dockerfile}"; then
+    if ! grep -q "docker_template/test/smoke_test" "${dockerfile}"; then
         if [[ "${has_gui}" == "true" ]]; then
             # GUI repos: copy all shared smoke tests (including display_env.bats)
-            sed -i '/COPY test\/smoke_test\//i COPY docker_template/smoke_test/ /smoke_test/' "${dockerfile}"
+            sed -i '/COPY test\/smoke_test\//i COPY docker_template/test/smoke_test/ /smoke_test/' "${dockerfile}"
         else
             # Non-GUI repos: copy only script_help + test_helper (skip display_env.bats)
-            sed -i '/COPY test\/smoke_test\//i COPY docker_template/smoke_test/test_helper.bash /smoke_test/test_helper.bash\nCOPY docker_template/smoke_test/script_help.bats /smoke_test/script_help.bats' "${dockerfile}"
+            sed -i '/COPY test\/smoke_test\//i COPY docker_template/test/smoke_test/test_helper.bash /smoke_test/test_helper.bash\nCOPY docker_template/test/smoke_test/script_help.bats /smoke_test/script_help.bats' "${dockerfile}"
         fi
     fi
 
@@ -325,7 +325,7 @@ BREAKING CHANGE: replaces docker_setup_helper subtree with docker_template.
 - Replace shell scripts with symlinks to docker_template/ subtree
 - Replace .hadolint.yaml with symlink to docker_template/.hadolint.yaml
 - Update Dockerfile CONFIG_SRC path to docker_template/config
-- Merge shared smoke tests from docker_template/smoke_test/ in Dockerfile
+- Merge shared smoke tests from docker_template/test/smoke_test/ in Dockerfile
 - Replace local CI workflows with reusable workflows from docker_template
 - Fixes X11/Wayland support via docker_template's run.sh
 

@@ -4,7 +4,7 @@
 
 Shared template for Docker container repos in the [ycpss91255-docker](https://github.com/ycpss91255-docker) organization.
 
-[繁體中文](doc/README.zh-TW.md) | [简体中文](doc/README.zh-CN.md) | [日本語](doc/README.ja.md)
+[繁體中文](doc/readme/README.zh-TW.md) | [简体中文](doc/readme/README.zh-CN.md) | [日本語](doc/readme/README.ja.md)
 
 ## Overview
 
@@ -113,10 +113,17 @@ jobs:
 ## Running Tests Locally
 
 ```bash
-docker compose run --rm ci
+make test        # Full CI (ShellCheck + Bats + Kcov) via docker compose
+make lint        # ShellCheck only
+make clean       # Remove coverage reports
+make help        # Show all available targets
 ```
 
-This runs ShellCheck + Bats tests with Kcov coverage.
+Or directly:
+```bash
+./ci.sh          # Full CI via docker compose
+./ci.sh --ci     # Run inside container (used by compose)
+```
 
 ## Smoke Tests
 
@@ -174,21 +181,26 @@ docker_template/
 │       ├── bashrc
 │       ├── terminator/
 │       └── tmux/
-├── smoke_test/                       # Shared tests for consumer repos
-│   ├── test_helper.bash
-│   ├── script_help.bats
-│   └── display_env.bats
-├── test/                             # Template self-tests (114 tests)
-├── compose.yaml                      # Local CI runner
+├── test/
+│   ├── smoke_test/                   # Shared tests for consumer repos
+│   │   ├── test_helper.bash
+│   │   ├── script_help.bats
+│   │   └── display_env.bats
+│   └── unit/                         # Template self-tests (114 tests)
+├── ci.sh                             # CI script (local + remote)
+├── Makefile                          # Unified command entry point
+├── compose.yaml                      # Docker CI runner
 ├── .hadolint.yaml                    # Shared Hadolint rules
 ├── .github/workflows/
-│   ├── self-test.yaml                # Template CI
+│   ├── self-test.yaml                # Template CI (calls ci.sh)
 │   ├── build-worker.yaml             # Reusable build workflow
 │   └── release-worker.yaml           # Reusable release workflow
+├── doc/
+│   ├── readme/                       # README translations
+│   ├── test/                         # TEST.md + translations
+│   └── changelog/                    # CHANGELOG.md + translations
 ├── .codecov.yaml
 ├── .gitignore
 ├── LICENSE
-├── README.md
-├── doc/
-└── TEST.md
+└── README.md
 ```
