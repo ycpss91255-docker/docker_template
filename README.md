@@ -19,7 +19,7 @@ Shared template for Docker container repos in the [ycpss91255-docker](https://gi
 # New repo: add subtree + init
 git subtree add --prefix=docker_template \
     git@github.com:ycpss91255-docker/docker_template.git main --squash
-./docker_template/scripts/init.sh
+./docker_template/script/init.sh
 
 # Upgrade to latest
 make upgrade-check   # check
@@ -42,7 +42,7 @@ graph TB
         scripts["build.sh / run.sh / exec.sh / stop.sh<br/>setup.sh / .hadolint.yaml"]
         smoke["test/smoke_test/<br/>script_help.bats<br/>display_env.bats"]
         config["config/<br/>bashrc / tmux / terminator / pip"]
-        mgmt["scripts/<br/>init.sh / upgrade.sh / ci.sh / migrate.sh"]
+        mgmt["script/<br/>init.sh / upgrade.sh / ci.sh / migrate.sh"]
         workflows["Reusable Workflows<br/>build-worker.yaml<br/>release-worker.yaml"]
     end
 
@@ -80,7 +80,7 @@ flowchart LR
     end
 
     build_test --> ci_container
-    make_test -->|"scripts/ci.sh"| ci_container
+    make_test -->|"script/ci.sh"| ci_container
     shellcheck --> hadolint --> bats
 
     push["git push / PR"] --> build_worker
@@ -102,9 +102,9 @@ flowchart LR
 | `test/smoke_test/` | Shared smoke tests for consumer repos |
 | `.hadolint.yaml` | Shared Hadolint rules |
 | `Makefile` | Unified command entry (`make test`, `make upgrade`, etc.) |
-| `scripts/init.sh` | Consumer repo first-time symlink setup |
-| `scripts/upgrade.sh` | Subtree version upgrade |
-| `scripts/ci.sh` | CI pipeline (local + remote) |
+| `script/init.sh` | Consumer repo first-time symlink setup |
+| `script/upgrade.sh` | Subtree version upgrade |
+| `script/ci.sh` | CI pipeline (local + remote) |
 | `.github/workflows/` | Reusable CI workflows (build + release) |
 
 ### What stays in each repo (not shared)
@@ -126,7 +126,7 @@ git subtree add --prefix=docker_template \
     git@github.com:ycpss91255-docker/docker_template.git main --squash
 
 # 2. Initialize symlinks (one command)
-./docker_template/scripts/init.sh
+./docker_template/script/init.sh
 ```
 
 ### Updating
@@ -139,7 +139,7 @@ make upgrade-check
 make upgrade
 
 # Or specify a version
-./docker_template/scripts/upgrade.sh v0.3.0
+./docker_template/script/upgrade.sh v0.3.0
 ```
 
 ## CI Reusable Workflows
@@ -192,8 +192,8 @@ make help        # Show all available targets
 
 Or directly:
 ```bash
-./scripts/ci.sh          # Full CI via docker compose
-./scripts/ci.sh --ci     # Run inside container (used by compose)
+./script/ci.sh          # Full CI via docker compose
+./script/ci.sh --ci     # Run inside container (used by compose)
 ```
 
 ## Tests
@@ -231,13 +231,13 @@ docker_template/
 ├── Makefile                          # Unified command entry (make test/lint/...)
 ├── compose.yaml                      # Docker CI runner
 ├── .hadolint.yaml                    # Shared Hadolint rules
-├── scripts/                          # Template management tools
+├── script/                          # Template management tools
 │   ├── init.sh                       # Consumer repo symlink setup
 │   ├── upgrade.sh                    # Subtree version upgrade
 │   ├── ci.sh                         # CI pipeline (local + remote)
 │   └── migrate.sh                    # Batch repo migration
 ├── .github/workflows/
-│   ├── self-test.yaml                # Template CI (calls scripts/ci.sh)
+│   ├── self-test.yaml                # Template CI (calls script/ci.sh)
 │   ├── build-worker.yaml             # Reusable build workflow
 │   └── release-worker.yaml           # Reusable release workflow
 ├── doc/

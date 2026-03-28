@@ -38,12 +38,12 @@ setup() {
 # ════════════════════════════════════════════════════════════════════
 
 @test "ci.sh exists and is executable" {
-    assert [ -f /source/scripts/ci.sh ]
-    assert [ -x /source/scripts/ci.sh ]
+    assert [ -f /source/script/ci.sh ]
+    assert [ -x /source/script/ci.sh ]
 }
 
 @test "ci.sh uses set -euo pipefail" {
-    run grep "set -euo pipefail" /source/scripts/ci.sh
+    run grep "set -euo pipefail" /source/script/ci.sh
     assert_success
 }
 
