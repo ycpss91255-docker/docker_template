@@ -54,7 +54,7 @@ EOF
 
 ターゲット:
   devel    開発環境（デフォルト）
-  test     スモークテストを実行
+  test     smoke test を実行
   runtime  最小化ランタイムイメージ
 EOF
             ;;
