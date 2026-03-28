@@ -115,7 +115,8 @@ flowchart LR
 | `config/` | Shell configs (bashrc, tmux, terminator, pip) |
 | `test/smoke_test/` | Shared smoke tests for consumer repos |
 | `.hadolint.yaml` | Shared Hadolint rules |
-| `Makefile` | Unified command entry (`make test`, `make upgrade`, etc.) |
+| `Makefile` | Template CI entry (`make test`, `make lint`, etc.) |
+| `Makefile.consumer` | Consumer repo entry (`make build`, `make run`, `make stop`, etc.) |
 | `script/init.sh` | Consumer repo first-time symlink setup |
 | `script/upgrade.sh` | Subtree version upgrade |
 | `script/ci.sh` | CI pipeline (local + remote) |
@@ -195,7 +196,26 @@ jobs:
 | `archive_name_prefix` | string | yes | - | Archive name prefix |
 | `extra_files` | string | no | `""` | Space-separated extra files |
 
-## Running Tests Locally
+## Consumer Makefile
+
+Consumer repos get a `Makefile` (symlinked from `Makefile.consumer`) with these targets:
+
+```bash
+make build          # Build devel image
+make run            # Run container (interactive)
+make run-detach     # Run in background
+make test           # Build and run smoke tests
+make runtime        # Build runtime image
+make exec           # Exec into running container
+make stop           # Stop and remove containers
+make upgrade        # Upgrade docker_template subtree
+make upgrade-check  # Check for updates
+make help           # Show all targets
+```
+
+Created automatically by `./docker_template/script/init.sh`.
+
+## Running Template Tests Locally
 
 ```bash
 make test        # Full CI (ShellCheck + Bats + Kcov) via docker compose
@@ -231,7 +251,8 @@ docker_template/
 │   │   ├── script_help.bats
 │   │   └── display_env.bats
 │   └── unit/                         # Template self-tests (124 tests)
-├── Makefile                          # Unified command entry (make test/lint/...)
+├── Makefile                          # Template CI entry (make test/lint/...)
+├── Makefile.consumer                 # Consumer repo entry (make build/run/stop/...)
 ├── compose.yaml                      # Docker CI runner
 ├── .hadolint.yaml                    # Shared Hadolint rules
 ├── script/                          # Template management tools
