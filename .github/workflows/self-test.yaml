@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run CI (ShellCheck + Bats + Kcov)
-        run: ./scripts/ci.sh
+        run: ./script/ci.sh
 
       - name: Upload coverage to Codecov
         if: always()
@@ -44,7 +44,7 @@ jobs:
           mkdir -p "${ARCHIVE_NAME}"
           cp -r build.sh run.sh exec.sh stop.sh setup.sh \
                 .hadolint.yaml Makefile compose.yaml \
-                config/ test/ scripts/ doc/ \
+                config/ test/ script/ doc/ \
                 README.md LICENSE \
                 "${ARCHIVE_NAME}/"
 
